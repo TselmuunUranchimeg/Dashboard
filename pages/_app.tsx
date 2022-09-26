@@ -1,8 +1,14 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import { SessionProvider } from "next-auth/react";
+import { Props } from "../types/page.types";
+import "../styles/globals.css";
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+function MyApp({ Component, pageProps: { session, ...pageProps } }: Props) {
+    const getLayout = Component.getLayout ?? ((page) => page);
+    return (
+        <SessionProvider session = {session}>
+            {getLayout(<Component { ...pageProps } />)}
+        </SessionProvider>
+    );
 }
 
-export default MyApp
+export default MyApp;

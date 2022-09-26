@@ -1,0 +1,7 @@
+.homepageLink {
+    @apply w-full flex justify-center box-border py-2 my-2;
+    @apply hover:bg-[#1f1e1e] rounded-md duration-150;
+}
+.homepageLink div {
+    @apply w-1/2 flex justify-start items-center gap-x-4 text-lg;
+}

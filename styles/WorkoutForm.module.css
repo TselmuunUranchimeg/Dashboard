@@ -1,0 +1,25 @@
+.workoutForm {
+    @apply h-full w-full;
+}
+
+.workoutForm ol {
+    @apply overflow-y-auto mobileM:max-h-[80%] max-h-[70%] !list-decimal mb-5 w-full;
+}
+
+.workoutForm ol li {
+    @apply flex items-center w-full mt-5;
+}
+
+.workoutForm input {
+    @apply bg-black;
+}
+
+.workoutButton {
+    @apply hover:bg-[#404BE9] duration-200 px-10 py-2 rounded-md font-semibold;
+    @apply text-xl mobileM:w-auto w-full;
+}
+
+.workoutIcon {
+    @apply !text-white cursor-pointer bg-[#131862] rounded-full;
+    @apply !text-5xl box-border p-3 items-end;
+}

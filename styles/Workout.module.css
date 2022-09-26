@@ -1,0 +1,7 @@
+.workoutModal {
+    @apply inline-flex items-center justify-center my-20 py-7;
+}
+
+.workoutModalBreakButton {
+    @apply w-1/3 font-bold text-lg;
+}
