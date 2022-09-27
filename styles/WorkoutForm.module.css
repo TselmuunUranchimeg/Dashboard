@@ -1,5 +1,5 @@
 .workoutForm {
-    @apply h-full w-full;
+    @apply h-full w-full box-border pt-5;
 }
 
 .workoutForm ol {
@@ -22,4 +22,8 @@
 .workoutIcon {
     @apply !text-white cursor-pointer bg-[#131862] rounded-full;
     @apply !text-5xl box-border p-3 items-end;
+}
+
+.workoutSnackbar div {
+    @apply !bg-[#f44336];
 }
