@@ -181,13 +181,18 @@ const RoutinePage: Page = () => {
             <Head>
                 <title>{state.name} - Workout routine</title>
             </Head>
+
+            {/* Modal dark background */}
             <div
                 className={`absolute bg-black bg-opacity-80 h-full w-full left-0 z-40 ${
                     started ? "block w-full" : "hidden w-0"
                 } flex justify-center`}
             >
+                {/* Modal */}
                 <div className = "md:w-2/5 md:h-[400px] w-full h-full md:mt-20 m-0">
-                    <div className = "bg-[#472692] p-4 text-center relative font-bold flex justify-between items-center md:rounded-t-md">
+
+                    {/* Modal header */}
+                    <div className = {`bg-[#472692] p-4 text-center relative font-bold flex justify-between items-center md:rounded-t-md drop-shadow-lg`}>
                         <h1 className = "w-[24px]"></h1>
                         <h1 className = "text-xl">Workout</h1>
                         <CloseIcon 
@@ -195,16 +200,21 @@ const RoutinePage: Page = () => {
                             onClick = {() => closeModal()}
                         />
                     </div>
+
+                    {/* Break modal body with 30 second timer */}
                     <div className = {`bg-[#472692] text-white text-center box-border pt-6 pb-10 ${
                         breakTime === -1
                         ? "hidden"
                         : "flex"
                     } md:rounded-b-md md:h-auto h-[calc(100%-60px)] flex-col justify-between items-center`}>
-                        <h1 className = "font-bold text-xl">Break time</h1>
+                        <div className = "font-bold text-xl">
+                            <h1>Break time</h1>
+                            <p>Next exercise - {state.exercises[index].exerciseName}</p>
+                        </div>
                         <div className = "flex flex-col justify-center items-center relative py-7">
                             <div className = "relative flex items-center justify-center mb-7">
                                 <CircularProgress 
-                                    value = {100}
+                                    value = {(breakTime + 1)*100/30}
                                     variant = "determinate"
                                     color = "secondary"
                                     size = "10rem"
@@ -254,6 +264,8 @@ const RoutinePage: Page = () => {
                                 </button>
                             </div>
                     </div>
+
+                    {/* Modal body with workout exercises including reps and timers */}
                     <div className = {`bg-white text-[#472692] text-center py-5 md:rounded-b-md ${
                         breakTime === -1
                         ? "flex"
@@ -289,7 +301,6 @@ const RoutinePage: Page = () => {
                                         return;
                                     }
                                     alert("There is no exercise to return to!");
-                                    closeModal();
                                 }}
                             />
                             <SkipNextIcon  
@@ -315,6 +326,8 @@ const RoutinePage: Page = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Information regarding routine with {routineId} under the user */}
             <div className="box-border pb-10 lg:pt-10 pt-16 lg:h-[calc(50%-1px)] relative flex">
                 <div className = "w-[25%] items-center justify-center lg:flex hidden">
                     <div className = "w-[90%] h-[90%] relative">
