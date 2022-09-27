@@ -51,7 +51,7 @@ const Sidebar = ({ children }: SidebarInterface) => {
     if (status === "authenticated") {
         return (
             <div className="flex h-screen">
-                <div className={`2xl:w-[450px] lg:w-[300px] h-full box-border pt-10 lg:relative ${
+                <div className={`2xl:w-[450px] lg:w-[300px] h-screen box-border pt-10 lg:relative ${
                     state ? "z-30 ml-0 w-[250px]" : "-ml-[250px] z-0 w-0"
                 } block lg:ml-0 duration-150 absolute bg-[#181818]`}>
                     <div className="text-center">
@@ -143,7 +143,7 @@ const Sidebar = ({ children }: SidebarInterface) => {
                         {"<- Log out"}
                     </button>
                 </div>
-                <div className={`2xl:w-[calc(100%-450px)] h-full relative lg:w-[calc(100%-300px)] w-screen`}>
+                <div className={`2xl:w-[calc(100%-450px)] h-screen relative lg:w-[calc(100%-300px)] w-screen`}>
                     <SidebarIcon 
                         setState = {setState}
                         state = {state}
