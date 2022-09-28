@@ -59,7 +59,11 @@ const RoutinePage: Page = () => {
         const less = 100 / val;
     
         useEffect(() => {
-            let timeout = setTimeout(() => {
+            let timeout = setTimeout(async () => {
+                if (index === state.exercises.length - 1) {
+                    await finishWorkout();
+                    return;
+                }
                 setExercise(state.exercises[
                     exercise.exerciseName === "About to start workout"
                     ? 0
@@ -164,6 +168,12 @@ const RoutinePage: Page = () => {
             requirement: 10
         });
         setBreak(-1);
+    }
+
+    const finishWorkout = async () => {
+        alert("You have finished your workout!");
+        await axios.patch(`/api/workout/${routineId as string}`);
+        closeModal();
     }
 
     if (!state) {
@@ -317,9 +327,7 @@ const RoutinePage: Page = () => {
                                         setBreak(29);
                                         return;
                                     }
-                                    alert("This is the last exercise!");
-                                    await axios.patch(`/api/workout/${routineId as string}`);
-                                    closeModal();
+                                    await finishWorkout();
                                 }}
                             />
                         </div>

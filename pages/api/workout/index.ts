@@ -51,6 +51,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                             routines: [routine],
                             dates: []
                         });
+                        res.status(200).end("Successfully created workout routine!");
                         return;
                     }
                     let routines = userWorkouts.routines;
