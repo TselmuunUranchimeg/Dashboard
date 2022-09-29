@@ -1,5 +1,5 @@
 .workoutForm {
-    @apply h-full w-full box-border pt-5;
+    @apply h-full w-full box-border lg:pt-0 pt-5;
 }
 
 .workoutForm ol {
