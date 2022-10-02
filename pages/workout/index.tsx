@@ -94,10 +94,10 @@ const WorkoutPage: Page = () => {
                                     ${ind === state.length - 1 ? "" : "mb-5"}`}
                                 >
                                     <div
-                                        className={`absolute bottom-0 w-full text-white py-3 px-4 duration-150 ${
+                                        className={`absolute bottom-0 w-full text-white pt-3 px-4 duration-150 ${
                                             !hover[ind]
-                                                ? "bg-[#131862]"
-                                                : "bg-[#404BE9]"
+                                                ? "bg-[#131862] pb-3"
+                                                : "bg-[#404BE9] pb-5"
                                         }`}
                                     >
                                         <h1>{val.name}</h1>
