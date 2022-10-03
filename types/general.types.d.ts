@@ -39,3 +39,23 @@ export type TodoList = Document & {
         notFinished: string[]
     }
 }
+
+//Weather types
+export type ForecastType = {
+    date: number;
+    day: number;
+    night: number;
+    iconInt: number;
+};
+export type CurrentWeatherType = {
+    currentWeather: number;
+    wind: number;
+    humidity: number;
+    text: string;
+    iconInt: number;
+}
+
+export type ApiWeatherType = {
+    currentWeather: CurrentWeatherType;
+    forecast: ForecastType[];
+}
