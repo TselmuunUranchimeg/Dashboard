@@ -56,7 +56,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             }
         }
     }
-    res.status(404).end("Workout routine not found");
+    res.status(404).end("Workout routine is not found");
 };
 
 export default handler;
