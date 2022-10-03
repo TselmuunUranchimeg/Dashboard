@@ -50,6 +50,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     );
                     res.status(200).end("Successfully saved today's progress!");
                     return;
+                default:
+                    res.status(400).end("Method not supported!");
+                    return;
             }
         }
     }
