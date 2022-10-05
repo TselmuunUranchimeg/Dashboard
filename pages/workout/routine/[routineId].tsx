@@ -133,7 +133,7 @@ const RoutinePage: Page = () => {
                 setState(res.data);
             }
         });
-    }, []);
+    }, [routineId]);
 
     useEffect(() => {
         if (breakTime > -1) {
