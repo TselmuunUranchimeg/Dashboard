@@ -48,7 +48,7 @@ const WorkoutPage: Page = () => {
             }
             return newTitle;
         });
-    }, [window.innerWidth]);
+    }, [window.innerWidth, session]);
 
     return (
         <div className="w-full h-full box-border p-10 relative">

@@ -14,7 +14,7 @@ const Home: Page = () => {
             router.push("/homepage", "/homepage");
             return;
         }
-    }, [status]);
+    }, [status, router]);
 
     if (status === "loading") {
         return (

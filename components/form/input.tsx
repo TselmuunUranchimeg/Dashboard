@@ -32,7 +32,7 @@ const Input = ({
 
     useEffect(() => {
         setExercise(val);
-    }, []);
+    }, [val]);
 
     const inputChange = async (
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,

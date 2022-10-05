@@ -96,7 +96,7 @@ const RoutinePage: Page = () => {
                 clearInterval(interval);
                 clearTimeout(timeout);
             }
-        }, []);
+        }, [index, less, setBreak, setExercise, setIndex, state.exercises, val]);
     
         return (
             <div className = {styles.workoutModal}>

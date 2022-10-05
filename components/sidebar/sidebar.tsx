@@ -46,7 +46,7 @@ const Sidebar = ({ children }: SidebarInterface) => {
                 return;
             }
         }
-    }, [status]);
+    }, [status, router]);
 
     if (status === "authenticated") {
         return (
@@ -57,6 +57,7 @@ const Sidebar = ({ children }: SidebarInterface) => {
                     <div className="text-center">
                         <Image
                             src={session!.user!.image!}
+                            alt={session!.user!.name!}
                             width={80}
                             height={80}
                             className="rounded-full"
