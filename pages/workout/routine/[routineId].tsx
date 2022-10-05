@@ -171,9 +171,11 @@ const RoutinePage: Page = () => {
     }
 
     const finishWorkout = async () => {
-        alert("You have finished your workout!");
-        await axios.patch(`/api/workout/${routineId as string}`);
-        closeModal();
+        let res = await axios.patch(`/api/workout/${routineId as string}`);
+        if (res.status === 200) {
+            alert(res.data);
+            closeModal();
+        }
     }
 
     if (!state) {
