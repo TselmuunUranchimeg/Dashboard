@@ -24,7 +24,7 @@ const WeatherLogo = ({ iconInt, height, width }: WeatherLogoType) => {
 };
 
 const WeatherTab = () => {
-    const [state, setState] = useState<ApiWeatherType | null>(null);
+    const [state, setState] = useState<ApiWeatherType | null | undefined>(null);
     const date = new Date();
     const formatter = new Intl.DateTimeFormat("en", {
         weekday: "long",
@@ -47,18 +47,28 @@ const WeatherTab = () => {
                 })
                 .catch((e) => {
                     if (axios.isAxiosError(e)) {
-                        console.log(e);
+                        setState(undefined);
                     }
                 });
         });
     }, []);
 
-    if (!state) {
+    if (state === null) {
         return (
             <div className="w-full h-full">
                 <LoadingComponent className={`${state ? "hidden" : "block"}`} />
             </div>
         );
+    } else if (state === undefined) {
+        return (
+            <div className = {`w-full h-full flex items-center justify-center lg:p-0 py-10 ${
+                date.getHours() < 18 ? "bg-[#82CAFF]" : "bg-[#131862]"
+            }`}>
+                <h1 className = "sm:text-lg mobileL:text-base mobileM:text-sm text-xs opacity-75">
+                    Something went wrong, please check later!
+                </h1>
+            </div>
+        )
     }
 
     return (
