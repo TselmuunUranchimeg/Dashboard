@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
+import Image from "next/image";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Page, ResponseExercise } from "../../types/page.types";
 import Sidebar from "../../components/sidebar/sidebar";
+import workoutImage from "../../public/bodybuilder.jpg";
 
 const WorkoutPage: Page = () => {
     const [state, setState] = useState<Array<ResponseExercise> | null>(null);
@@ -86,15 +88,21 @@ const WorkoutPage: Page = () => {
                                     onMouseLeave={() =>
                                         hoverFunction(ind, false)
                                     }
-                                    className={`h-0 pb-[75%] text-black bg-[url('../public/bodybuilder.jpg')] bg-cover relative ${
-                                        hover[ind]
-                                            ? "opacity-100"
-                                            : "opacity-75"
-                                    } 
+                                    className={`h-0 pb-[75%] text-black relative
                                     ${ind === state.length - 1 ? "" : "mb-5"}`}
                                 >
+                                    <Image 
+                                        src = {workoutImage}
+                                        className = {`${
+                                            hover[ind]
+                                                ? "opacity-100"
+                                                : "opacity-75"
+                                        } z-0`}
+                                        placeholder = "blur"
+                                        layout = "fill"
+                                    />
                                     <div
-                                        className={`absolute bottom-0 w-full text-white pt-3 px-4 duration-150 ${
+                                        className={`absolute bottom-0 w-full text-white pt-3 px-4 duration-150 z-10 ${
                                             !hover[ind]
                                                 ? "bg-[#131862] pb-3"
                                                 : "bg-[#404BE9] pb-5"
