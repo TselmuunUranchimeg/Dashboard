@@ -100,6 +100,7 @@ const WorkoutPage: Page = () => {
                                         } z-0`}
                                         placeholder = "blur"
                                         layout = "fill"
+                                        alt = "Image of a bodybuilder flexing"
                                     />
                                     <div
                                         className={`absolute bottom-0 w-full text-white pt-3 px-4 duration-150 z-10 ${
