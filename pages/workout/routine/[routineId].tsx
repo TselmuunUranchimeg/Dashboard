@@ -13,6 +13,7 @@ import { Page } from "../../../types/page.types";
 import { Routine, Exercise } from "../../../types/general.types";
 import styles from "../../../styles/Workout.module.css";
 import LoadingComponent from "../../../components/loading/Loading";
+import bodybuilderImage from "../../../public/bodybuilder.jpg";
 
 type ExerciseType = {
     val: number | { reps: number };
@@ -343,10 +344,11 @@ const RoutinePage: Page = () => {
                 <div className = "w-[25%] items-center justify-center lg:flex hidden">
                     <div className = "w-[90%] h-[90%] relative">
                         <Image
-                            src="/bodybuilder.jpg"
+                            src={bodybuilderImage}
                             alt="Photo by Pikx By Panther: https://www.pexels.com/photo/photo-of-man-with-muscular-body-1547248/"
                             layout="fill"
                             className = "object-cover"
+                            placeholder = "blur"
                         />
                     </div>
                 </div>
