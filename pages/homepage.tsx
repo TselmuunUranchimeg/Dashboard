@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useSession } from "next-auth/react";
 import { Page } from "../types/page.types";
 import Sidebar from "../components/sidebar/sidebar";
+import WeatherTab from "../components/WeatherTab/WeatherTab";
 
 const Homepage: Page = () => {
     const { data: session } = useSession();
@@ -19,8 +20,8 @@ const Homepage: Page = () => {
                     <h1>Coming soon</h1>
                 </div>
             </div>
-            <div className = "w-full bg-[#131862] h-[48%] mt-8 flex items-center justify-center">
-                <h1>Coming soon</h1>
+            <div className = "w-full lg:h-[48%] mt-8">
+                <WeatherTab />
             </div>
         </div>
     )

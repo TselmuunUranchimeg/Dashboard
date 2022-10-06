@@ -4,6 +4,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { Page } from "../types/page.types";
+import LoadingComponent from "../components/loading/Loading";
 
 const Home: Page = () => {
     const { status } = useSession();
@@ -18,8 +19,8 @@ const Home: Page = () => {
 
     if (status === "loading") {
         return (
-            <div>
-                <h1>Loading...</h1>
+            <div className = "h-screen w-screen">
+                <LoadingComponent />
             </div>
         )
     }

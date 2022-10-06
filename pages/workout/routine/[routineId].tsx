@@ -12,6 +12,7 @@ import Sidebar from "../../../components/sidebar/sidebar";
 import { Page } from "../../../types/page.types";
 import { Routine, Exercise } from "../../../types/general.types";
 import styles from "../../../styles/Workout.module.css";
+import LoadingComponent from "../../../components/loading/Loading";
 
 type ExerciseType = {
     val: number | { reps: number };
@@ -180,11 +181,11 @@ const RoutinePage: Page = () => {
 
     if (!state) {
         return (
-            <div>
+            <div className = "h-full w-full">
                 <Head>
                     <title>Loading...</title>
                 </Head>
-                <h1>Loading...</h1>
+                <LoadingComponent />
             </div>
         );
     }

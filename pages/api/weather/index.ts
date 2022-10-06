@@ -2,6 +2,10 @@ import { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
 import { ForecastType, CurrentWeatherType, ApiWeatherType } from "../../../types/general.types";
 
+type LocationFunctionType = {
+    locationKey: string;
+    currentLocation: string;
+};
 type Temperature = {
     Minimum: {
         Value: number;
@@ -35,14 +39,19 @@ type ForecastApiResponseType = {
     };
 };
 
-const getLocationKey = async (lat: string, lon: string): Promise<string> => {
+const getLocationKey = async (lat: string, lon: string): Promise<LocationFunctionType> => {
     const latitude = parseFloat(lat);
     const longitude = parseFloat(lon);
     const res = await axios.get(
         `https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${
             process.env.WEATHER_API_KEY!}&q=${`${latitude},${longitude}`}`
     );
-    return res.data["Key"] as string;
+    return {
+        locationKey: res.data["Key"] as string,
+        currentLocation: `${
+            res.data["EnglishName"] as string
+        }, ${res.data.Country.EnglishName as string}`
+    };
 };
 
 const currentWeather = async (locationKey: string): Promise<CurrentWeatherType> => {
@@ -82,7 +91,7 @@ const weatherHandler = async (
                 !isNaN(parseFloat(lat as string)) &&
                 !isNaN(parseFloat(lon as string))
             ) {
-                const locationKey = await getLocationKey(
+                const { locationKey, currentLocation } = await getLocationKey(
                     lat as string,
                     lon as string
                 );
@@ -91,6 +100,7 @@ const weatherHandler = async (
                     forecastWeather(locationKey),
                 ]);
                 res.status(200).json({
+                    currentLocation,
                     currentWeather: arr[0],
                     forecast: arr[1]
                 });

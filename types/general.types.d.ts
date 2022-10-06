@@ -58,4 +58,5 @@ export type CurrentWeatherType = {
 export type ApiWeatherType = {
     currentWeather: CurrentWeatherType;
     forecast: ForecastType[];
+    currentLocation: string;
 }
