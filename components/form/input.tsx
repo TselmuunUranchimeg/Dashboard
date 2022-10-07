@@ -3,6 +3,12 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import TextField from "@mui/material/TextField";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import InputLabel from "@mui/material/InputLabel";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Box from "@mui/material/Box";
+import { createTheme, ThemeProvider } from "@mui/material";
 import styles from "../../styles/WorkoutForm.module.css";
 import { Exercise } from "../../types/general.types";
 
@@ -15,6 +21,10 @@ type InputType = {
     removeInputField: (ind: number) => Promise<void>;
     copyInputField: (ind: number) => Promise<void>;
 };
+enum RequirementSelectType {
+    Duration = "Duration",
+    Reps = "Reps",
+}
 
 const Input = ({
     ind,
@@ -23,25 +33,81 @@ const Input = ({
     updateExercise,
     addInputField,
     removeInputField,
-    copyInputField
+    copyInputField,
 }: InputType) => {
     const [exercise, setExercise] = useState<Exercise>({
         exerciseName: "",
-        requirement: 0
+        requirement: 0,
+    });
+    const [select, setSelect] = useState(RequirementSelectType.Duration);
+    const theme = createTheme({
+        components: {
+            MuiFormControl: {
+                styleOverrides: {
+                    root: {
+                        backgroundColor: "black",
+                    },
+                },
+            },
+            MuiFormLabel: {
+                styleOverrides: {
+                    root: {
+                        color: "white",
+                        "&.Mui-focused": {
+                            color: "white !important",
+                        },
+                    },
+                },
+            },
+            MuiSelect: {
+                styleOverrides: {
+                    select: {
+                        color: "white",
+                    },
+                },
+            },
+            MuiSvgIcon: {
+                styleOverrides: {
+                    root: {
+                        color: "white !important",
+                    },
+                },
+            },
+        },
     });
 
     useEffect(() => {
         setExercise(val);
     }, [val]);
 
+    const selectChange = async (e: SelectChangeEvent) => {
+        setSelect((_) => {
+            setExercise((prev) => {
+                let oldValue: number =
+                    typeof prev.requirement === "number"
+                        ? prev.requirement
+                        : prev.requirement.reps;
+                let newObj: Exercise = { ...prev, requirement: oldValue };
+                if (e.target.value === RequirementSelectType.Reps) {
+                    newObj = { ...prev, requirement: { reps: oldValue } };
+                }
+                updateExercise(ind, newObj);
+                return newObj;
+            });
+            return e.target.value as RequirementSelectType;
+        });
+    };
+
     const inputChange = async (
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-        ind: number,
-        isReps: boolean
+        ind: number
     ) => {
         setExercise((prev) => {
-            let newObj: Exercise = { ...prev, requirement: parseInt(e.target.value) };
-            if (isReps) {
+            let newObj: Exercise = {
+                ...prev,
+                requirement: parseInt(e.target.value),
+            };
+            if (select === RequirementSelectType.Reps) {
                 newObj = {
                     ...prev,
                     requirement: { reps: parseInt(e.target.value) },
@@ -82,39 +148,57 @@ const Input = ({
                                 }}
                                 className="!pr-3 sm:!mb-0 !mt-3"
                             />
+                            <ThemeProvider theme={theme}>
+                                <Box 
+                                    width={223}
+                                    display = "flex"
+                                    alignItems = "end"
+                                    marginRight = "12px"
+                                >
+                                    <FormControl fullWidth={true}>
+                                        <InputLabel id="demo-simple-select">
+                                            Exercise type
+                                        </InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={select}
+                                            label="Exercise Type"
+                                            onChange={async (
+                                                e: SelectChangeEvent
+                                            ) => {
+                                                await selectChange(e);
+                                            }}
+                                            required={true}
+                                        >
+                                            <MenuItem
+                                                value={
+                                                    RequirementSelectType.Reps
+                                                }
+                                            >
+                                                {RequirementSelectType.Reps}
+                                            </MenuItem>
+                                            <MenuItem
+                                                value={
+                                                    RequirementSelectType.Duration
+                                                }
+                                            >
+                                                {RequirementSelectType.Duration}
+                                            </MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                            </ThemeProvider>
                             <TextField
                                 required
                                 type="number"
                                 value={
-                                    typeof exercise.requirement === "object"
-                                        ? 0
-                                        : exercise.requirement
+                                    typeof exercise.requirement === "number"
+                                        ? exercise.requirement
+                                        : exercise.requirement.reps
                                 }
                                 onChange={async (e) =>
-                                    await inputChange(e, ind, false)
-                                }
-                                label="Duration"
-                                InputLabelProps={{
-                                    className: "!text-white",
-                                }}
-                                InputProps={{
-                                    className: "!text-white",
-                                    inputProps: {
-                                        min: 0,
-                                    },
-                                }}
-                                className="!pr-3 sm:!mb-0 !mt-3"
-                            />
-                            <TextField
-                                required
-                                type="number"
-                                value={
-                                    typeof exercise.requirement === "object"
-                                        ? exercise.requirement.reps
-                                        : 0
-                                }
-                                onChange={async (e) =>
-                                    await inputChange(e, ind, true)
+                                    await inputChange(e, ind)
                                 }
                                 label="Reps"
                                 InputLabelProps={{
@@ -123,7 +207,7 @@ const Input = ({
                                 InputProps={{
                                     className: "!text-white",
                                     inputProps: {
-                                        min: 0,
+                                        min: 1,
                                     },
                                 }}
                                 className="!pr-3 sm:!mb-0 !mt-3"

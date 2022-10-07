@@ -53,7 +53,7 @@ const WorkoutForm = ({
                 setInputFields(prev => {
                     return [...prev, {
                         exerciseName: "",
-                        requirement: 0
+                        requirement: 1
                     }];
                 });
             })();

@@ -9,7 +9,7 @@ const WorkoutCreatePage: Page = () => {
     const [name, setName] = useState("");
     const [inputs, setInputFields] = useState<Array<Exercise>>([{
         exerciseName: "",
-        requirement: 0
+        requirement: 1
     }]);
 
     return (

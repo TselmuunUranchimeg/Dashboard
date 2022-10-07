@@ -20,7 +20,7 @@ const Homepage: Page = () => {
                     <h1>Coming soon</h1>
                 </div>
             </div>
-            <div className = "w-full md:h-[48%] mt-8">
+            <div className = "w-full lg:h-[48%] mt-8">
                 <WeatherTab />
             </div>
         </div>
