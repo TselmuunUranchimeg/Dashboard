@@ -154,6 +154,7 @@ const Input = ({
                                     display = "flex"
                                     alignItems = "end"
                                     marginRight = "12px"
+                                    className = "sm:mt-0 mt-3"
                                 >
                                     <FormControl fullWidth={true}>
                                         <InputLabel id="demo-simple-select">

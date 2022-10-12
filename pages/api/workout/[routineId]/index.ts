@@ -38,7 +38,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                         dates.push({
                             routineNames: [routine.name],
                             year: todayDate.getUTCFullYear(),
-                            month: todayDate.getUTCMonth(),
+                            month: todayDate.getUTCMonth() + 1,
                             day: todayDate.getUTCDate(),
                         });
                     } else {
