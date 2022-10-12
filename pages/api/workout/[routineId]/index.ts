@@ -31,7 +31,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     let today = dates.find(
                         (item) =>
                             item.year === todayDate.getUTCFullYear() &&
-                            item.month === todayDate.getUTCMonth() &&
+                            item.month === todayDate.getUTCMonth() + 1 &&
                             item.day === todayDate.getUTCDate()
                     );
                     if (!today) {
