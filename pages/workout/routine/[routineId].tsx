@@ -15,15 +15,17 @@ import styles from "../../../styles/Workout.module.css";
 import LoadingComponent from "../../../components/loading/Loading";
 import bodybuilderImage from "../../../public/bodybuilder.jpg";
 
+type WorkoutType = {
+    prev: null | Exercise;
+    current: Exercise;
+    next: null | Exercise;
+    currentIndex: number;
+};
 type ExerciseType = {
     val: number | { reps: number };
 };
 type ExerciseTimerType = {
-    val: number;
-    setExercise: Dispatch<SetStateAction<Exercise>>;
-    setIndex: Dispatch<SetStateAction<number>>;
-    state: Routine;
-    index: number;
+    workout: WorkoutType;
     setBreak: Dispatch<SetStateAction<number>>;
     started: boolean;
 };
@@ -44,23 +46,24 @@ const RoutinePage: Page = () => {
     const { routineId } = router.query;
     const [state, setState] = useState<Routine>();
     const [started, setStart] = useState(false);
-    const [exercise, setExercise] = useState<Exercise>({
-        exerciseName: "About to start workout",
-        requirement: 10,
-    });
-    const [index, setIndex] = useState(0);
     const [breakTime, setBreak] = useState(-1);
     const breakRef = useRef<NodeJS.Timer | null>(null);
+    const [workout, setWorkout] = useState<WorkoutType>({
+        prev: null,
+        current: {
+            exerciseName: "About to start workout",
+            requirement: 10,
+        },
+        next: null,
+        currentIndex: -1,
+    });
 
     const ExerciseTimer = ({
-        val,
-        setExercise,
-        setIndex,
-        state,
-        index,
+        workout,
         setBreak,
         started,
     }: ExerciseTimerType) => {
+        const val = workout.current!.requirement as number;
         const [duration, setDuration] = useState(val);
         const [percentage, setPercentage] = useState(100);
         const less = 100 / val;
@@ -68,27 +71,14 @@ const RoutinePage: Page = () => {
         useEffect(() => {
             if (started) {
                 let timeout = setTimeout(async () => {
-                    if (index + 1 === state.exercises.length) {
+                    if (!workout.next) {
                         await finishWorkout();
                         return;
+                    } else if (workout.currentIndex === -1) {
+                        nextExercise();
+                        return;
                     }
-                    setExercise(
-                        state.exercises[
-                            exercise.exerciseName === "About to start workout"
-                                ? 0
-                                : index + 1
-                        ]
-                    );
-                    setIndex(
-                        exercise.exerciseName === "About to start workout"
-                            ? 0
-                            : index + 1
-                    );
-                    setBreak(
-                        exercise.exerciseName === "About to start workout"
-                            ? -1
-                            : 29
-                    );
+                    setBreak(29);
                 }, (val + 1) * 1000);
                 let interval = setInterval(() => {
                     setDuration((prev) => {
@@ -107,15 +97,7 @@ const RoutinePage: Page = () => {
                     clearTimeout(timeout);
                 };
             }
-        }, [
-            index,
-            less,
-            setBreak,
-            setExercise,
-            setIndex,
-            state.exercises,
-            val,
-        ]);
+        }, []);
 
         return (
             <div className={styles.workoutModal}>
@@ -146,45 +128,20 @@ const RoutinePage: Page = () => {
         );
     };
 
-    useEffect(() => {
-        axios.get(`/api/workout/${routineId as string}`).then((res) => {
-            if (res.status < 300) {
-                setState(res.data);
-            }
-        });
-    }, [routineId]);
-
-    useEffect(() => {
-        if (breakTime > -1) {
-            breakRef.current = setInterval(() => {
-                setBreak((prev) => {
-                    if (prev === 0) {
-                        clearInterval(breakRef.current!);
-                    }
-                    return prev - 1;
-                });
-            }, 1000);
-            return () => {
-                clearTimeout(breakRef.current!);
-            };
-        }
-    }, [breakTime]);
-
     const startWorkout = async () => {
         setStart(true);
-        setIndex(0);
-        setExercise({
-            exerciseName: "About to start workout",
-            requirement: 10,
-        });
     };
 
     const closeModal = () => {
         setStart(false);
-        setIndex(0);
-        setExercise({
-            exerciseName: "About to start workout",
-            requirement: 10,
+        setWorkout({
+            prev: null,
+            current: {
+                exerciseName: "About to start workout",
+                requirement: 10,
+            },
+            next: state!.exercises[0],
+            currentIndex: -1,
         });
         setBreak(-1);
     };
@@ -196,6 +153,50 @@ const RoutinePage: Page = () => {
             closeModal();
         }
     };
+
+    const nextExercise = () => {
+        setWorkout((prev) => {
+            const newObj: WorkoutType = {
+                prev: { ...prev.current },
+                current: { ...prev.next! },
+                currentIndex: prev.currentIndex + 1,
+                next:
+                    state!.exercises.length === prev.currentIndex + 2
+                        ? null
+                        : { ...state!.exercises[prev.currentIndex + 2] },
+            };
+            return newObj;
+        });
+    };
+
+    useEffect(() => {
+        axios.get(`/api/workout/${routineId as string}`).then((res) => {
+            if (res.status < 300) {
+                setState(res.data);
+                setWorkout((prev) => {
+                    return {
+                        ...prev,
+                        next: res.data.exercises[0],
+                    };
+                });
+            }
+        });
+    }, [routineId]);
+
+    useEffect(() => {
+        if (breakTime === 29) {
+            breakRef.current = setInterval(() => {
+                setBreak((prev) => {
+                    if (prev === -1) {
+                        nextExercise();
+                        clearInterval(breakRef.current!);
+                        return -1;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
+        }
+    }, [breakTime]);
 
     if (!state) {
         return (
@@ -243,7 +244,13 @@ const RoutinePage: Page = () => {
                             <h1>Break time</h1>
                             <p>
                                 Next exercise -{" "}
-                                {state.exercises[index].exerciseName}
+                                {`
+                                ${
+                                    workout.currentIndex === -1
+                                        ? ""
+                                        : state!.exercises[workout.currentIndex]
+                                              .exerciseName
+                                }`}
                             </p>
                         </div>
                         <div className="flex flex-col justify-center items-center relative py-7">
@@ -260,27 +267,6 @@ const RoutinePage: Page = () => {
                             </div>
                         </div>
                         <div className="flex box-border items-center w-full">
-                            <button
-                                onClick={() => {
-                                    clearInterval(breakRef.current!);
-                                    breakRef.current = null;
-                                    setBreak(-1);
-                                }}
-                                className={styles.workoutModalBreakButton}
-                            >
-                                Skip
-                            </button>
-                            <button
-                                onClick={() => {
-                                    if (breakRef.current) {
-                                        clearInterval(breakRef.current);
-                                        breakRef.current = null;
-                                    }
-                                }}
-                                className={styles.workoutModalBreakButton}
-                            >
-                                Pause
-                            </button>
                             <button
                                 onClick={() => {
                                     if (!breakRef.current) {
@@ -300,6 +286,28 @@ const RoutinePage: Page = () => {
                             >
                                 Continue
                             </button>
+                            <button
+                                onClick={() => {
+                                    if (breakRef.current) {
+                                        clearInterval(breakRef.current);
+                                        breakRef.current = null;
+                                    }
+                                }}
+                                className={styles.workoutModalBreakButton}
+                            >
+                                Pause
+                            </button>
+                            <button
+                                onClick={() => {
+                                    clearInterval(breakRef.current!);
+                                    breakRef.current = null;
+                                    nextExercise();
+                                    setBreak(-1);
+                                }}
+                                className={styles.workoutModalBreakButton}
+                            >
+                                Skip
+                            </button>
                         </div>
                     </div>
 
@@ -311,23 +319,18 @@ const RoutinePage: Page = () => {
                     >
                         <h1 className="font-bold text-xl">
                             {`${
-                                exercise.exerciseName ===
-                                "About to start workout"
+                                workout.currentIndex === -1
                                     ? ""
-                                    : `${index + 1}.`
-                            } ${exercise.exerciseName}`}
+                                    : `${workout.currentIndex + 1}.`
+                            } ${workout.current.exerciseName}`}
                         </h1>
-                        {typeof exercise.requirement === "object" ? (
-                            <ExerciseReps val={exercise.requirement} />
+                        {typeof workout.current.requirement === "object" ? (
+                            <ExerciseReps val={workout.current.requirement} />
                         ) : (
                             <ExerciseTimer
-                                val={exercise.requirement}
-                                setExercise={setExercise}
-                                setIndex={setIndex}
-                                state={state}
-                                index={index}
                                 setBreak={setBreak}
                                 started={started}
+                                workout={workout}
                             />
                         )}
                         <div className="flex w-full mt-4 justify-center">
@@ -335,28 +338,33 @@ const RoutinePage: Page = () => {
                                 className="cursor-pointer mr-3    "
                                 fontSize="large"
                                 onClick={() => {
-                                    if (index > 0) {
-                                        setExercise(state.exercises[index - 1]);
-                                        setIndex((prev) => prev - 1);
+                                    if (!workout.prev) {
+                                        alert(
+                                            "There is no exercise before this one!"
+                                        );
                                         return;
                                     }
-                                    alert("There is no exercise to return to!");
+                                    setWorkout((prev) => {
+                                        prev.next = { ...prev.current };
+                                        prev.current = { ...prev.prev! };
+                                        prev.currentIndex -= 1;
+                                        prev.prev =
+                                            state!.exercises[
+                                                prev.currentIndex - 1
+                                            ];
+                                        return { ...prev };
+                                    });
                                 }}
                             />
                             <SkipNextIcon
                                 className="cursor-pointer ml-3"
                                 fontSize="large"
                                 onClick={async () => {
-                                    if (index + 1 < state.exercises.length) {
-                                        if (
-                                            exercise.exerciseName ===
-                                            "About to start workout"
-                                        ) {
-                                            setExercise(state.exercises[0]);
+                                    if (workout.next) {
+                                        if (workout.currentIndex === -1) {
+                                            nextExercise();
                                             return;
                                         }
-                                        setExercise(state.exercises[index + 1]);
-                                        setIndex((prev) => prev + 1);
                                         setBreak(29);
                                         return;
                                     }
