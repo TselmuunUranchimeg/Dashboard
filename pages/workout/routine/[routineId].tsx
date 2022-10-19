@@ -26,8 +26,8 @@ type ExerciseType = {
 };
 type ExerciseTimerType = {
     workout: WorkoutType;
-    setBreak: Dispatch<SetStateAction<number>>;
     started: boolean;
+    breakTime: number;
 };
 type ExerciseRepsType = {
     val: { reps: number };
@@ -60,8 +60,8 @@ const RoutinePage: Page = () => {
 
     const ExerciseTimer = ({
         workout,
-        setBreak,
         started,
+        breakTime
     }: ExerciseTimerType) => {
         const val = workout.current!.requirement as number;
         const [duration, setDuration] = useState(val);
@@ -69,16 +69,9 @@ const RoutinePage: Page = () => {
         const less = 100 / val;
 
         useEffect(() => {
-            if (started) {
+            if (started && breakTime === -1) {
                 let timeout = setTimeout(async () => {
-                    if (!workout.next) {
-                        await finishWorkout();
-                        return;
-                    } else if (workout.currentIndex === -1) {
-                        nextExercise();
-                        return;
-                    }
-                    setBreak(29);
+                    await logic();
                 }, (val + 1) * 1000);
                 let interval = setInterval(() => {
                     setDuration((prev) => {
@@ -169,6 +162,17 @@ const RoutinePage: Page = () => {
         });
     };
 
+    const logic = async () => {
+        if (workout.next) {
+            if (workout.currentIndex !== -1) {
+                setBreak(29);
+            }
+            nextExercise();
+            return;
+        }
+        await finishWorkout();
+    }
+
     useEffect(() => {
         axios.get(`/api/workout/${routineId as string}`).then((res) => {
             if (res.status < 300) {
@@ -184,17 +188,19 @@ const RoutinePage: Page = () => {
     }, [routineId]);
 
     useEffect(() => {
-        if (breakTime === 29) {
+        if (breakTime > -1) {
             breakRef.current = setInterval(() => {
                 setBreak((prev) => {
-                    if (prev === -1) {
-                        nextExercise();
+                    if (prev === 0) {
                         clearInterval(breakRef.current!);
                         return -1;
                     }
                     return prev - 1;
                 });
             }, 1000);
+            return () => {
+                clearInterval(breakRef.current!);
+            }
         }
     }, [breakTime]);
 
@@ -243,14 +249,11 @@ const RoutinePage: Page = () => {
                         <div className="font-bold text-xl">
                             <h1>Break time</h1>
                             <p>
-                                Next exercise -{" "}
-                                {`
-                                ${
-                                    workout.currentIndex === -1
-                                        ? ""
-                                        : state!.exercises[workout.currentIndex]
-                                              .exerciseName
-                                }`}
+                                {
+                                    !workout.next
+                                    ? "Last exercise"
+                                    : `Next exercise - ${workout.current!.exerciseName}`
+                                }
                             </p>
                         </div>
                         <div className="flex flex-col justify-center items-center relative py-7">
@@ -301,7 +304,6 @@ const RoutinePage: Page = () => {
                                 onClick={() => {
                                     clearInterval(breakRef.current!);
                                     breakRef.current = null;
-                                    nextExercise();
                                     setBreak(-1);
                                 }}
                                 className={styles.workoutModalBreakButton}
@@ -328,9 +330,9 @@ const RoutinePage: Page = () => {
                             <ExerciseReps val={workout.current.requirement} />
                         ) : (
                             <ExerciseTimer
-                                setBreak={setBreak}
                                 started={started}
                                 workout={workout}
+                                breakTime={breakTime}
                             />
                         )}
                         <div className="flex w-full mt-4 justify-center">
@@ -360,15 +362,7 @@ const RoutinePage: Page = () => {
                                 className="cursor-pointer ml-3"
                                 fontSize="large"
                                 onClick={async () => {
-                                    if (workout.next) {
-                                        if (workout.currentIndex === -1) {
-                                            nextExercise();
-                                            return;
-                                        }
-                                        setBreak(29);
-                                        return;
-                                    }
-                                    await finishWorkout();
+                                    await logic();
                                 }}
                             />
                         </div>
