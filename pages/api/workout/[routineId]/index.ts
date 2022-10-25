@@ -7,7 +7,7 @@ import { connectToDb } from "../../../../lib/mongodb";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const session = await unstable_getServerSession(req, res, authOptions);
     if (!session) {
-        res.status(401).end("Unauthorized");
+        res.status(401).end("Not authorized");
         return;
     }
     const email = session.user?.email as string;
@@ -28,18 +28,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 case "PATCH":
                     let dates = document.dates;
                     let todayDate = new Date();
-                    let today = dates.find(
-                        (item) =>
-                            item.year === todayDate.getUTCFullYear() &&
-                            item.month === todayDate.getUTCMonth() + 1 &&
-                            item.day === todayDate.getUTCDate()
-                    );
+                    todayDate.setHours(0, 0, 0, 0);
+                    let today = dates.find((item) => item.date.getTime() === todayDate.getTime());
                     if (!today) {
                         dates.push({
                             routineNames: [routine.name],
-                            year: todayDate.getUTCFullYear(),
-                            month: todayDate.getUTCMonth() + 1,
-                            day: todayDate.getUTCDate(),
+                            date: todayDate
                         });
                     } else {
                         today.routineNames.push(routine.name);

@@ -14,9 +14,7 @@ export type Routine = RoutineBody & {
 }
 export type WorkedOutDate = {
     routineNames: string[],
-    year: number,
-    month: number,
-    day: number
+    date: Date
 }
 export type Workout = Document & {
     email: string,

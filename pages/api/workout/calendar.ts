@@ -15,6 +15,10 @@ const calendarHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         return;
     }
     const { year, month } = req.query;
+    const specifiedDate = new Date(
+        parseInt(year as string),
+        parseInt(month as string),
+    );
     const email = session.user?.email as string;
     const workoutCollection = (await connectToDb()).collection<Workout>(
         "workouts"
@@ -22,12 +26,9 @@ const calendarHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     const document = await workoutCollection.findOne({ email });
     if (document) {
         const arr = document.dates
-            .filter(
-                (item) =>
-                    item.year === parseInt(year as string) &&
-                    item.month === parseInt(month as string)
-            ).map(val => {
-                const { year, month, ...rest } = val;
+            .filter((item) => item.date.getTime() >= specifiedDate.getTime())
+            .map((val) => {
+                const { date, ...rest } = val;
                 return { ...rest };
             });
         res.status(200).json(arr);
