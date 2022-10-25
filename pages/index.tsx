@@ -56,6 +56,7 @@ const Home: Page = () => {
                             <a
                                 href="https://github.com/TselmuunUranchimeg/Dashboard"
                                 target="_blank"
+                                rel = "noreferrer"
                                 className="bg-black hover:bg-white hover:text-black duration-100 px-5 py-3 rounded-sm font-semibold"
                             >
                                 Source code
