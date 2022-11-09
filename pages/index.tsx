@@ -34,13 +34,14 @@ const Home: Page = () => {
             <div className="w-screen h-screen box-border px-14 pb-5 pt-7">
                 {/* Header */}
                 <div className="flex w-full justify-between items-center">
-                    <Link href="/">
-                        <a className="font-bold text-3xl">METIS</a>
+                    <Link href="/" className="font-bold text-3xl">
+                        METIS
                     </Link>
-                    <Link href="/auth">
-                        <a className="opacity-75 hover:opacity-100 duration-100 text-lg">
-                            Login
-                        </a>
+                    <Link
+                        href="/auth"
+                        className="opacity-75 hover:opacity-100 duration-100 text-lg"
+                    >
+                        Login
                     </Link>
                 </div>
                 {/* Body */}

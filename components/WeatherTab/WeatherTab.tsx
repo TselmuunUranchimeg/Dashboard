@@ -16,9 +16,10 @@ const WeatherLogo = ({ iconInt, height, width }: WeatherLogoType) => {
             src={`https://apidev.accuweather.com/developers/Media/Default/WeatherIcons/${
                 iconInt < 10 ? `0${iconInt}` : iconInt
             }-s.png`}
+            width = {width}
+            height = {height}
             alt="Some Logo"
-            width={width}
-            height={height}
+            className = "w-48"
         />
     );
 };

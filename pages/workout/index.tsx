@@ -59,10 +59,12 @@ const WorkoutPage: Page = () => {
             </Head>
             <div className="flex justify-between items-center">
                 <h1 className="font-bold sm:text-xl text-lg">{title}</h1>
-                <Link href="/workout/create">
-                    <a className="bg-[#131862] px-2 py-2 rounded-md font-semibold hover:bg-[#404BE9] duration-200 sm:text-base text-sm sm:px-5">
+                <Link
+                    href="/workout/create"
+                    className="bg-[#131862] px-2 py-2 rounded-md font-semibold hover:bg-[#404BE9] duration-200 sm:text-base text-sm sm:px-5">
+                    
                         Create new routine
-                    </a>
+                    
                 </Link>
             </div>
             <div
@@ -80,40 +82,41 @@ const WorkoutPage: Page = () => {
                 ) : (
                     state?.map((val, ind) => {
                         return (
-                            <Link href={`/workout/routine/${val.id}`} key={ind}>
-                                <a
-                                    onMouseEnter={() =>
-                                        hoverFunction(ind, true)
-                                    }
-                                    onMouseLeave={() =>
-                                        hoverFunction(ind, false)
-                                    }
-                                    className={`h-0 pb-[75%] text-black relative
-                                    ${ind === state.length - 1 ? "" : "mb-5"}`}
+                            (<Link
+                                href={`/workout/routine/${val.id}`}
+                                key={ind}
+                                onMouseEnter={() =>
+                                    hoverFunction(ind, true)
+                                }
+                                onMouseLeave={() =>
+                                    hoverFunction(ind, false)
+                                }
+                                className={`h-0 pb-[75%] text-black relative
+                                ${ind === state.length - 1 ? "" : "mb-5"}`}>
+
+                                <Image 
+                                    src = {workoutImage}
+                                    className = {`${
+                                        hover[ind]
+                                            ? "opacity-100"
+                                            : "opacity-75"
+                                    } z-0`}
+                                    placeholder = "blur"
+                                    layout = "fill"
+                                    alt = "Image of a bodybuilder flexing"
+                                />
+                                <div
+                                    className={`absolute bottom-0 w-full text-white pt-3 px-4 duration-150 z-10 ${
+                                        !hover[ind]
+                                            ? "bg-[#131862] pb-3"
+                                            : "bg-[#404BE9] pb-5"
+                                    }`}
                                 >
-                                    <Image 
-                                        src = {workoutImage}
-                                        className = {`${
-                                            hover[ind]
-                                                ? "opacity-100"
-                                                : "opacity-75"
-                                        } z-0`}
-                                        placeholder = "blur"
-                                        layout = "fill"
-                                        alt = "Image of a bodybuilder flexing"
-                                    />
-                                    <div
-                                        className={`absolute bottom-0 w-full text-white pt-3 px-4 duration-150 z-10 ${
-                                            !hover[ind]
-                                                ? "bg-[#131862] pb-3"
-                                                : "bg-[#404BE9] pb-5"
-                                        }`}
-                                    >
-                                        <h1>{val.name}</h1>
-                                        <p>{val.exerciseCount}</p>
-                                    </div>
-                                </a>
-                            </Link>
+                                    <h1>{val.name}</h1>
+                                    <p>{val.exerciseCount}</p>
+                                </div>
+
+                            </Link>)
                         );
                     })
                 )}

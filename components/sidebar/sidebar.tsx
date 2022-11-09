@@ -54,7 +54,7 @@ const Sidebar = ({ children }: SidebarInterface) => {
                 <div className={`2xl:w-[450px] lg:w-[300px] h-screen box-border pt-10 lg:relative ${
                     state ? "z-30 ml-0 w-[250px]" : "-ml-[250px] z-0 w-0"
                 } block lg:ml-0 duration-150 absolute bg-[#181818]`}>
-                    <div className="text-center">
+                    <div className="flex flex-col items-center">
                         <Image
                             src={session!.user!.image!}
                             alt={session!.user!.name!}
@@ -67,70 +67,73 @@ const Sidebar = ({ children }: SidebarInterface) => {
                         </h1>
                     </div>
                     <div className="flex flex-col">
-                        <Link href="/homepage">
-                            <a
-                                onClick = {() => {
-                                    setState(false);
-                                }}
-                                className={`${styles.homepageLink} ${
-                                    router.asPath.split("/")[1] === "homepage"
-                                        ? "bg-[#1f1e1e]"
-                                        : ""
-                                }`}
-                            >
-                                <div>
-                                    <HomeIcon fontSize="medium" />
-                                    Homepage
-                                </div>
-                            </a>
+                        <Link
+                            href="/homepage"
+                            onClick = {() => {
+                                setState(false);
+                            }}
+                            className={`${styles.homepageLink} ${
+                                router.asPath.split("/")[1] === "homepage"
+                                    ? "bg-[#1f1e1e]"
+                                    : ""
+                            }`}>
+
+                            <div>
+                                <HomeIcon fontSize="medium" />
+                                Homepage
+                            </div>
+
                         </Link>
-                        <Link href="/workout">
-                            <a
-                                onClick = {() => {
-                                    setState(false);
-                                }}
-                                className={`${styles.homepageLink} ${
-                                    router.asPath.split("/")[1] === "workout"
-                                        ? "bg-[#1f1e1e]"
-                                        : ""
-                                }`}>
-                                <div>
-                                    <FitnessCenterIcon fontSize="medium" />
-                                    Workout
-                                </div>
-                            </a>
+                        <Link
+                            href="/workout"
+                            onClick = {() => {
+                                setState(false);
+                            }}
+                            className={`${styles.homepageLink} ${
+                                router.asPath.split("/")[1] === "workout"
+                                    ? "bg-[#1f1e1e]"
+                                    : ""
+                            }`}>
+
+                            <div>
+                                <FitnessCenterIcon fontSize="medium" />
+                                Workout
+                            </div>
+
                         </Link>
-                        <Link href="/plan">
-                            <a
-                                onClick = {() => {
-                                    setState(false);
-                                }}
-                                className={`${styles.homepageLink} ${
-                                    router.asPath.split("/")[1] === "planning"
-                                        ? "bg-[#1f1e1e]"
-                                        : ""
-                                }`}>
-                                <div>
-                                    <FormatListBulletedIcon fontSize="medium" />
-                                    Planning
-                                </div>
-                            </a>
+                        <Link
+                            href="/plan"
+                            onClick = {() => {
+                                setState(false);
+                            }}
+                            className={`${styles.homepageLink} ${
+                                router.asPath.split("/")[1] === "planning"
+                                    ? "bg-[#1f1e1e]"
+                                    : ""
+                            }`}>
+
+                            <div>
+                                <FormatListBulletedIcon fontSize="medium" />
+                                Planning
+                            </div>
+
                         </Link>
-                        <Link href="/music">
-                            <a
-                                onClick = {() => {
-                                    setState(false);
-                                }}
-                                className={`${styles.homepageLink} ${
-                                    router.asPath.split("/")[1] === "music"
-                                        ? "bg-[#1f1e1e]"
-                                        : ""
-                                }`}>
-                                <div>
-                                    <MusicNoteIcon fontSize="medium" />
-                                    Music
-                                </div>
-                            </a>
+                        <Link
+                            href="/music"
+                            onClick = {() => {
+                                setState(false);
+                            }}
+                            className={`${styles.homepageLink} ${
+                                router.asPath.split("/")[1] === "music"
+                                    ? "bg-[#1f1e1e]"
+                                    : ""
+                            }`}>
+
+                            <div>
+                                <MusicNoteIcon fontSize="medium" />
+                                Music
+                            </div>
+
                         </Link>
                     </div>
                     <button
