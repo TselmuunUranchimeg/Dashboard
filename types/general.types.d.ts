@@ -29,13 +29,15 @@ export type Weight = Document & {
 }
 
 //Todo list types
-export type TodoList = Document & {
+export type Task = {
+    completed: string[],
+    notFinished: string[]
+};
+export type PlanType = Document & {
     email: string,
-    date: Date,
-    task: {
-        completed: string[],
-        notFinished: string[]
-    }
+    date: string,
+    task: Task,
+    expireAt: Date
 }
 
 //Weather types

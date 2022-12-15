@@ -102,7 +102,7 @@ const Sidebar = ({ children }: SidebarInterface) => {
 
                         </Link>
                         <Link
-                            href="/plan"
+                            href="/planning"
                             onClick = {() => {
                                 setState(false);
                             }}
