@@ -34,7 +34,7 @@ const SingleTab = ({ date, state, setState, showMessage }: SingleTabInterface) =
                     }
                 }
             });
-    }, [date]);
+    }, [date, setState, showMessage]);
 
     if (!state) {
         return (

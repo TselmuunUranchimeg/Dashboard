@@ -6,7 +6,6 @@ import { useSession } from "next-auth/react";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { Page } from "../types/page.types";
 import LoadingComponent from "../components/loading/Loading";
-import ThreeImages from "../components/Images/ThreeImages";
 
 const Home: Page = () => {
     const { status } = useSession();
@@ -65,13 +64,7 @@ const Home: Page = () => {
                             </a>
                         </div>
                         <div className="w-1/2">
-                            <ThreeImages
-                                urls={[
-                                    "bodybuilder.jpg",
-                                    "bodybuilder.jpg",
-                                    "bodybuilder.jpg",
-                                ]}
-                            />
+                            
                         </div>
                     </div>
                 </div>

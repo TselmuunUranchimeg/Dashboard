@@ -57,7 +57,7 @@ const Planning: Page = () => {
                     console.log(e.message);
                 }
             });
-    }, []);
+    }, [today]);
 
     if (!ready) {
         return (
@@ -147,7 +147,7 @@ const Planning: Page = () => {
             <div className="sm:h-1/2 h-auto w-full flex flex-col sm:flex-row box-border lg:p-5 p-10 pb-5 justify-between">
                 <div className="sm:w-[calc(50%_-_10px)] w-full sm:h-full h-[300px] bg-[#404BE9] relative mb-5">
                     <h1 className="text-center text-xl font-bold py-3">
-                        Today's task
+                        {"Today's task"}
                     </h1>
                     <SingleTab
                         showMessage={showMessage}
