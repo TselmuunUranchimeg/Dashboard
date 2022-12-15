@@ -90,7 +90,7 @@ const RoutinePage: Page = () => {
                     clearTimeout(timeout);
                 };
             }
-        }, [breakTime, less, started, val]);
+        }, []);
 
         return (
             <div className={styles.workoutModal}>
