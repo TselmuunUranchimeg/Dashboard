@@ -111,7 +111,6 @@ const weatherHandler = async (
     } catch (e) {
         if (axios.isAxiosError(e)) {
             res.status(500).end("Something went wrong, please try again later!");
-            console.log(e.response);
         } else {
             console.log(e);
         }

@@ -4,7 +4,6 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { CircularProgress } from "@mui/material";
 import { Task } from "../../types/general.types";
-import LoadingComponent from "../loading/Loading";
 
 type StateType = {
     finished: number;
@@ -13,17 +12,32 @@ type StateType = {
 
 const TasksTab = () => {
     const [state, setState] = useState<StateType | null>(null);
+    const [message, setMessage] = useState("Loading...");
 
     useEffect(() => {
-        axios.get(`/api/plan/${dayjs().format("YYYY-MM-DD")}`).then((res) => {
-            const data = res.data as Task;
-            setState(() => {
-                return {
-                    finished: data.completed.length,
-                    total: data.completed.length + data.notFinished.length,
-                };
-            });
-        });
+        axios
+            .get(`/api/plan/${dayjs(new Date("2022-12-25")).format("YYYY-MM-DD")}`)
+            .then((res) => {
+                const data = res.data as Task;
+                setState(() => {
+                    return {
+                        finished: data.completed.length,
+                        total: data.completed.length + data.notFinished.length,
+                    };
+                });
+                setMessage(
+                    `${data.completed.length}/${
+                        data.completed.length + data.notFinished.length
+                    } done`
+                );
+            })
+            .catch(e => {
+                if (axios.isAxiosError(e)) {
+                    if (e.response?.status === 404) {
+                        setMessage("No task to display");
+                    }
+                }
+            })
     }, []);
 
     return (
@@ -34,11 +48,9 @@ const TasksTab = () => {
                     variant="determinate"
                     className="absolute"
                     size="10rem"
-                    color = "inherit"
+                    color="inherit"
                 />
-                <p className = "font-bold text-lg">
-                    {!state ? "Loading ..." : `${state.finished}/${state.total} done`}
-                </p>
+                <p className="font-bold text-lg">{message}</p>
             </div>
             <Link
                 href="/planning"
