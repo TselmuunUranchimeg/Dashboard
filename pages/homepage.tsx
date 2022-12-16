@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import { Page } from "../types/page.types";
 import Sidebar from "../components/sidebar/sidebar";
 import WeatherTab from "../components/WeatherTab/WeatherTab";
+import TasksTab from "../components/plan/TasksTab";
 
 const Homepage: Page = () => {
     const { data: session } = useSession();
@@ -12,12 +13,12 @@ const Homepage: Page = () => {
             <Head>
                 <title>Homepage - {session?.user?.name}</title>
             </Head>
-            <div className = "w-full flex md:h-[52%] h-[96%] md:flex-row flex-col">
+            <div className = "w-full flex md:h-[52%] h-auto md:flex-row flex-col">
                 <div className = "lg:w-[60%] bg-[#404BE9] mr-10 md:h-auto h-[48%] md:mb-0 w-full mb-10 flex items-center justify-center">
                     <h1>Coming soon</h1>
                 </div>
-                <div className = "lg:w-[40%] bg-[#472692] md:h-full h-[48%] w-full flex items-center justify-center">
-                    <h1>Coming soon</h1>
+                <div className = "lg:w-[40%] bg-[#472692] md:h-full h-[375px] w-full flex items-center justify-center">
+                    <TasksTab />
                 </div>
             </div>
             <div className = "w-full lg:h-[48%] mt-8">
