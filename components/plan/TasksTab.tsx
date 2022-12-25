@@ -42,7 +42,7 @@ const TasksTab = () => {
 
     return (
         <div className="w-full h-full flex flex-col justify-center items-center">
-            <div className="inline-flex items-center justify-center mt-10 mb-16 py-5">
+            <div className="inline-flex items-center justify-center my-10 py-5">
                 <CircularProgress
                     value={!state ? 0 : (state.finished / state.total) * 100}
                     variant="determinate"

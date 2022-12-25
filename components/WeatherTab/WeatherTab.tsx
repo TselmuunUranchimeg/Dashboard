@@ -76,7 +76,7 @@ const WeatherTab = () => {
         <div
             className={`w-full h-full flex ${
                 date.getHours() < 18 ? "bg-[#82CAFF]" : "bg-[#131862]"
-            } lg:flex-row flex-col`}
+            } lg:flex-row flex-col mb-10`}
         >
             {/* Current weather */}
             <div className="lg:w-[45%] w-full h-full flex">
